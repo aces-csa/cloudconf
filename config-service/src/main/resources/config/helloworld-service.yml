@@ -1,0 +1,18 @@
+server:
+  port: 8045
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+  instance : 
+   prefer-ip-address  : true  
+
+
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+ 
+springdoc:
+  cache:
+    disabled: true

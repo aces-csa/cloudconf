@@ -1,0 +1,58 @@
+server:
+  port: 8060
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+  instance : 
+      prefer-ip-address : true
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+    
+    
+    
+
+              
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+       
+       - id: helloworld-service
+         uri : lb://helloworld-service
+         predicates:
+          - Path=/helloworld/**
+         filters:
+          - RewritePath=/helloworld/(?<path>.*), /$\{path}
+          
+       - id: apiwala-service
+         uri : lb://apiwala-service
+         predicates:
+          - Path=/apiwala/**
+         filters:
+           - RewritePath=/apiwala/(?<path>.*), /$\{path}
+           
+       - id: openapi
+         uri: http://localhost:${server.port}
+         predicates:
+            - Path=/v3/api-docs/**
+         filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: apiwala
+        url: /v3/api-docs/apiwala
+      - name : helloworld
+        url : /v3/api-docs/helloworld
+      
+  cache:
+    disabled: true
+      
+ 
